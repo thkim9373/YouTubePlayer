@@ -9,23 +9,39 @@ import com.hoony.youtubeplayer.common.Key
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.net.URL
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val YOUTUBE_URL =
-        "https://www.googleapis.com/youtube/v3/search?key=" + Key.YOUTUBE_KEY + "&part=snippet"
+    private val YOUTUBE_URL = "https://www.googleapis.com/youtube/v3/search?" +
+            "key=" + Key.YOUTUBE_KEY +
+            "&part=snippet" +
+            "&maxResult=10"
 
     private val _videoDataMutableLiveData = MutableLiveData<String>()
 
     val videoDataLiveData: LiveData<String>
         get() = _videoDataMutableLiveData
 
+    private var nextPageToken: String? = null
+    private var prevPageToken: String? = null
+
     init {
         viewModelScope.launch {
             try {
-                _videoDataMutableLiveData.postValue(getYouTubeInputStream())
+                val responseJSONObject = getYouTubeJsonObject()
+                _videoDataMutableLiveData.postValue(responseJSONObject.toString())
+
+                responseJSONObject?.let {
+                    nextPageToken = it.getString("nextPageToken")
+                    prevPageToken = it.getString("prevPageToken")
+
+                    val itemsArray = it.getJSONArray("items")
+
+                }
             } catch (e: Exception) {
                 println(e)
                 _videoDataMutableLiveData.postValue("Exception : $e")
@@ -33,23 +49,22 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getYouTubeInputStream(): String = withContext(Dispatchers.IO) {
+    private suspend fun getYouTubeJsonObject(): JSONObject? = withContext(Dispatchers.IO) {
         val url = URL(YOUTUBE_URL)
         val inputStream = url.openStream()
-        var result = "init value"
+        var result: JSONObject? = null
 
         inputStream.use {
-            val reader = BufferedReader(inputStream.reader())
+            val reader = BufferedReader(InputStreamReader(it))
             val content = StringBuilder()
-            try {
-                var line = reader.readLine()
+            reader.use {
+                var line = it.readLine()
                 while (line != null) {
                     content.append(line)
-                    line = reader.readLine()
+                    line = it.readLine()
                 }
-                result = content.toString()
-            } finally {
-                reader.close()
+                val inputString = content.toString()
+                result = JSONObject(inputString)
             }
         }
 
