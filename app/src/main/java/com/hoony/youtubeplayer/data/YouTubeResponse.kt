@@ -1,21 +1,20 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class YouTubeResponse(
-    @JsonProperty("etag")
+    @SerializedName("etag")
     val etag: String,
-    @JsonProperty("items")
+    @SerializedName("items")
     val items: List<Item>,
-    @JsonProperty("kind")
+    @SerializedName("kind")
     val kind: String,
-    @JsonProperty("nextPageToken")
+    @SerializedName("nextPageToken")
     val nextPageToken: String?,
-    @JsonProperty("prevPageToken")
+    @SerializedName("prevPageToken")
     val prevPageToken: String?,
-    @JsonProperty("pageInfo")
+    @SerializedName("pageInfo")
     val pageInfo: PageInfo,
-    @JsonProperty("regionCode")
+    @SerializedName("regionCode")
     val regionCode: String
 )

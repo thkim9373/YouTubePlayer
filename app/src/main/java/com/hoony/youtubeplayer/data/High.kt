@@ -1,13 +1,12 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class High(
-    @JsonProperty("height")
+    @SerializedName("height")
     val height: Int,
-    @JsonProperty("url")
+    @SerializedName("url")
     val url: String,
-    @JsonProperty("width")
+    @SerializedName("width")
     val width: Int
 )

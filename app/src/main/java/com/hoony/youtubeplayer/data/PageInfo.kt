@@ -1,11 +1,10 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class PageInfo(
-    @JsonProperty("resultsPerPage")
+    @SerializedName("resultsPerPage")
     val resultsPerPage: Int,
-    @JsonProperty("totalResults")
+    @SerializedName("totalResults")
     val totalResults: Int
 )

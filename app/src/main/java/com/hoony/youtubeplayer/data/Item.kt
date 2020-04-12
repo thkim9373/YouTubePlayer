@@ -1,15 +1,14 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class Item(
-    @JsonProperty("etag")
+    @SerializedName("etag")
     val etag: String,
-    @JsonProperty("id")
+    @SerializedName("id")
     val id: Id,
-    @JsonProperty("kind")
+    @SerializedName("kind")
     val kind: String,
-    @JsonProperty("snippet")
+    @SerializedName("snippet")
     val snippet: Snippet
 )

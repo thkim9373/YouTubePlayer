@@ -1,11 +1,10 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class Id(
-    @JsonProperty("kind")
+    @SerializedName("kind")
     val kind: String,
-    @JsonProperty("videoId")
+    @SerializedName("videoId")
     val videoId: String
 )

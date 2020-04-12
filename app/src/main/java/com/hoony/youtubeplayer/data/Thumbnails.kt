@@ -1,13 +1,12 @@
 package com.hoony.youtubeplayer.data
 
-
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.google.gson.annotations.SerializedName
 
 data class Thumbnails(
-    @JsonProperty("default")
+    @SerializedName("default")
     val default: Default,
-    @JsonProperty("high")
+    @SerializedName("high")
     val high: High,
-    @JsonProperty("medium")
+    @SerializedName("medium")
     val medium: Medium
 )
