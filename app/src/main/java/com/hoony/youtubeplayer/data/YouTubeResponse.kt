@@ -11,7 +11,9 @@ data class YouTubeResponse(
     @JsonProperty("kind")
     val kind: String,
     @JsonProperty("nextPageToken")
-    val nextPageToken: String,
+    val nextPageToken: String?,
+    @JsonProperty("prevPageToken")
+    val prevPageToken: String?,
     @JsonProperty("pageInfo")
     val pageInfo: PageInfo,
     @JsonProperty("regionCode")

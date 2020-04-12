@@ -5,7 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import com.hoony.youtubeplayer.common.Key
+import com.hoony.youtubeplayer.data.YouTubeResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -36,11 +38,11 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 _videoDataMutableLiveData.postValue(responseJSONObject.toString())
 
                 responseJSONObject?.let {
-                    nextPageToken = it.getString("nextPageToken")
-                    prevPageToken = it.getString("prevPageToken")
+                    val gson = Gson()
+                    val youTubeResponse = gson.fromJson(it.toString(), YouTubeResponse::class.java)
 
-                    val itemsArray = it.getJSONArray("items")
-
+                    nextPageToken = youTubeResponse.nextPageToken
+                    prevPageToken = youTubeResponse.prevPageToken
                 }
             } catch (e: Exception) {
                 println(e)
