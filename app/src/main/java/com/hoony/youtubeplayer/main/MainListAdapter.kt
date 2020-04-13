@@ -1,6 +1,7 @@
 package com.hoony.youtubeplayer.main
 
 import android.content.Context
+import android.content.Intent
 import android.os.Build
 import android.text.Html
 import android.view.LayoutInflater
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.hoony.youtubeplayer.R
 import com.hoony.youtubeplayer.data.VideoInfo
-import java.net.URLDecoder
+import com.hoony.youtubeplayer.player.PlayerActivity
 
 class MainListAdapter(val videoInfoList: List<VideoInfo>) :
     RecyclerView.Adapter<MainListViewHolder>() {
@@ -50,10 +51,18 @@ class MainListAdapter(val videoInfoList: List<VideoInfo>) :
                 .into(it.tvThumbnail)
 
 //            it.tvTitle.text = URLDecoder.decode(videoInfo.snippet.title, "UTF-8")
-            it.tvTitle.text = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            it.tvTitle.text = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 Html.fromHtml(videoInfo.snippet.title, Html.FROM_HTML_MODE_LEGACY).toString()
             } else {
                 Html.fromHtml(videoInfo.snippet.title).toString()
+            }
+
+            it.clContainer.setOnClickListener {
+                run {
+                    val intent = Intent(context, PlayerActivity::class.java)
+                    intent.putExtra("videoInfo", videoInfo)
+                    context.startActivity(intent)
+                }
             }
         }
     }
