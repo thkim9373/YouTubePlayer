@@ -7,11 +7,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import com.hoony.youtubeplayer.common.Key
+import com.hoony.youtubeplayer.data.VideoInfo
 import com.hoony.youtubeplayer.data.YouTubeResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.URL
@@ -24,9 +24,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             "&maxResult=10"
 
     private val _videoDataMutableLiveData = MutableLiveData<String>()
-
     val videoDataLiveData: LiveData<String>
         get() = _videoDataMutableLiveData
+
+    private val _videoInfoListMutableLiveData = MutableLiveData<List<VideoInfo>>()
+    val videoInfoListLiveData: LiveData<List<VideoInfo>>
+        get() = _videoInfoListMutableLiveData
 
     private var nextPageToken: String? = null
     private var prevPageToken: String? = null
@@ -34,15 +37,17 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         viewModelScope.launch {
             try {
-                val responseJSONObject = getYouTubeJsonObject()
-                _videoDataMutableLiveData.postValue(responseJSONObject.toString())
+                val responseJSONString = getYouTubeJsonObject()
+                _videoDataMutableLiveData.postValue(responseJSONString)
 
-                responseJSONObject?.let {
+                responseJSONString?.let {
                     val gson = Gson()
-                    val youTubeResponse = gson.fromJson(it.toString(), YouTubeResponse::class.java)
+                    val youTubeResponse = gson.fromJson(it, YouTubeResponse::class.java)
 
                     nextPageToken = youTubeResponse.nextPageToken
                     prevPageToken = youTubeResponse.prevPageToken
+
+                    _videoInfoListMutableLiveData.postValue(youTubeResponse.videoInfoList)
                 }
             } catch (e: Exception) {
                 println(e)
@@ -51,10 +56,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    private suspend fun getYouTubeJsonObject(): JSONObject? = withContext(Dispatchers.IO) {
+    private suspend fun getYouTubeJsonObject(): String? = withContext(Dispatchers.IO) {
         val url = URL(YOUTUBE_URL)
         val inputStream = url.openStream()
-        var result: JSONObject? = null
+        var result: String? = null
 
         inputStream.use {
             val reader = BufferedReader(InputStreamReader(it))
@@ -65,8 +70,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     content.append(line)
                     line = it.readLine()
                 }
-                val inputString = content.toString()
-                result = JSONObject(inputString)
+                result = content.toString()
             }
         }
 

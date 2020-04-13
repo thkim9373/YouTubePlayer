@@ -2,6 +2,7 @@
   <dictionary name="TaeHoon">
     <words>
       <w>etag</w>
+      <w>gson</w>
     </words>
   </dictionary>
 </component>

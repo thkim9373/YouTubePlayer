@@ -2,7 +2,7 @@ package com.hoony.youtubeplayer.data
 
 import com.google.gson.annotations.SerializedName
 
-data class Item(
+data class VideoInfo(
     @SerializedName("etag")
     val etag: String,
     @SerializedName("id")

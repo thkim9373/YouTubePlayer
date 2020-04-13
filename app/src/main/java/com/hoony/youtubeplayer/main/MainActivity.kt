@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.hoony.youtubeplayer.R
 import com.hoony.youtubeplayer.databinding.ActivityMainBinding
 
@@ -22,16 +24,36 @@ class MainActivity : AppCompatActivity() {
                 .get(MainViewModel::class.java)
         }
 
+        setView()
         setObserve()
     }
 
-    private fun setObserve() {
-        viewModel?.let {
-            binding?.let { binding ->
-                it.videoDataLiveData.observe(
+    private fun setView() {
+        binding?.let {
+            it.rvVideo.layoutManager =
+                LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+            it.rvVideo.addItemDecoration(
+                DividerItemDecoration(
                     this,
-                    Observer { response ->
-                        binding.tvText.text = response
+                    DividerItemDecoration.VERTICAL
+                )
+            )
+        }
+    }
+
+    private fun setObserve() {
+        viewModel?.let { viewModel ->
+            binding?.let { binding ->
+                //                it.videoDataLiveData.observe(
+//                    this,
+//                    Observer { response ->
+//                        binding.tvText.text = response
+//                    }
+//                )
+                viewModel.videoInfoListLiveData.observe(
+                    this,
+                    Observer {
+                        binding.rvVideo.adapter = MainListAdapter(it)
                     }
                 )
             }
