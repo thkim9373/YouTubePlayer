@@ -17,10 +17,12 @@ class PlayerActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_player)
         viewModel = application!!.let {
-            ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(it))
-                .get(PlayerViewModel::class.java)
+            ViewModelProvider(
+                this,
+                PlayerViewModelFactory(it, intent.getParcelableExtra<VideoInfo?>("videoInfo")!!)
+            ).get(PlayerViewModel::class.java)
         }
-        
+
         binding?.tvText?.text = intent.getParcelableExtra<VideoInfo?>("videoInfo").toString()
     }
 }
