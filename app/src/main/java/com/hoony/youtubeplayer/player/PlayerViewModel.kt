@@ -14,13 +14,19 @@ import com.hoony.youtubeplayer.extractor.model.YoutubeMeta
 class PlayerViewModel(application: Application, videoInfo: VideoInfo) :
     AndroidViewModel(application), YoutubeStreamExtractor.ExtractorListener {
 
-    private val _videoUrlStringLiveData = MutableLiveData<String>()
-    val videoUrlStringLiveData: LiveData<String>
-        get() = _videoUrlStringLiveData
+    private val _mediaInfoListLiveData = MutableLiveData<List<YTMedia>>()
+    val mediaInfoListLiveData: LiveData<List<YTMedia>>
+        get() = _mediaInfoListLiveData
+
+    private val _subtitleListLiveData = MutableLiveData<List<YTSubtitles>>()
+    val subtitleListLiveData: LiveData<List<YTSubtitles>>
+        get() = _subtitleListLiveData
+
+    private val _metaDataLiveData = MutableLiveData<YoutubeMeta>()
+    val metaDataLiveData: LiveData<YoutubeMeta>
+        get() = _metaDataLiveData
 
     init {
-//        Extractor(application, this).extract(getVideoUrlLink(videoInfo.id.videoId), true, true)
-
         YoutubeStreamExtractor(this).useDefaultLogin().Extract(videoInfo.id.videoId)
     }
 
@@ -34,10 +40,8 @@ class PlayerViewModel(application: Application, videoInfo: VideoInfo) :
         subList: MutableList<YTSubtitles>?,
         meta: YoutubeMeta?
     ) {
-        val subString = if (subList != null && subList.size >= 1) {
-            subList[0].baseUrl
-        } else {
-            null
-        }
+        this._mediaInfoListLiveData.postValue(adativeStream)
+        this._subtitleListLiveData.postValue(subList)
+        this._metaDataLiveData.postValue(meta)
     }
 }

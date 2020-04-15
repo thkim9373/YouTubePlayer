@@ -9,11 +9,27 @@
         android:layout_height="match_parent"
         tools:context=".player.PlayerActivity">
 
-        <TextView
-            android:id="@+id/tv_text"
+        <TextureView
+            android:id="@+id/texture_view"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="h, 4:3"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ScrollView
+            android:id="@+id/sv_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/texture_view">
+
+            <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp" />
+
+        </ScrollView>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
