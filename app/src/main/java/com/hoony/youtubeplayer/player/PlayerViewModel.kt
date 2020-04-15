@@ -1,6 +1,7 @@
 package com.hoony.youtubeplayer.player
 
 import android.app.Application
+import android.text.TextUtils
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -30,8 +31,12 @@ class PlayerViewModel(application: Application, videoInfo: VideoInfo) :
         YoutubeStreamExtractor(this).useDefaultLogin().Extract(videoInfo.id.videoId)
     }
 
+    private fun getVideoUrlLink(videoId: String): String {
+        return TextUtils.htmlEncode("https://youtube.com/watch?v=$videoId")
+    }
+
     override fun onExtractionGoesWrong(e: ExtractorException?) {
-        println(e)
+        
     }
 
     override fun onExtractionDone(

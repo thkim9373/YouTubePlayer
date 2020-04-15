@@ -1,5 +1,7 @@
 package com.hoony.youtubeplayer.extractor.model;
 
+import org.jetbrains.annotations.NotNull;
+
 public class YTMedia {
     int itag;
     String mimeType;
@@ -177,4 +179,12 @@ public class YTMedia {
 
     }
 
+    @NotNull
+    @Override
+    public String toString() {
+        return "YTMedia{" + "\n" +
+                "itag=" + itag + "\n" +
+                "mimeType=" + mimeType + "\n" +
+                '}' + "\n";
+    }
 }
